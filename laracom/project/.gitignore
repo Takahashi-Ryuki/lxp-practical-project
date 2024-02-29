@@ -25,3 +25,4 @@ Envoy.blade.php
 \.php_cs\.cache
 public/css
 public/js
+/public/storage

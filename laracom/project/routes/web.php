@@ -88,6 +88,7 @@ Route::namespace('Front')->group(function () {
             Route::resource('state.city', 'StateCityController');
         });
 
+        Route::post('product/{product}/review', 'ReviewController@store')->name('product.review.store');
         Route::get('accounts', 'AccountsController@index')->name('accounts');
         Route::get('checkout', 'CheckoutController@index')->name('checkout.index');
         Route::post('checkout', 'CheckoutController@store')->name('checkout.store');

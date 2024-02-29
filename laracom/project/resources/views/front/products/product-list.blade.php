@@ -15,7 +15,7 @@
                                                 <input type="hidden" name="product" value="{{ $product->id }}">
                                                 <button id="add-to-cart-btn" type="submit" class="btn btn-warning"
                                                     data-toggle="modal" data-target="#cart-modal"> <i
-                                                        class="fa fa-cart-plus"></i> Add to cart</button>
+                                                        class="fa fa-cart-plus"></i> かごに追加</button>
                                             </form>
                                         </li>
                                         <li> <button type="button" class="btn btn-warning" data-toggle="modal"

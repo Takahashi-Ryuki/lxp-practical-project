@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-12">
         @if (!empty($product->cover))
             <ul id="thumbnails" class="col-md-4 list-unstyled">
                 <li>
@@ -29,11 +29,14 @@
             </figure>
         @endif
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-12">
         <div class="product-description">
             <h1>{{ $product->name }}
-                <small>{{ config('cart.currency') }} {{ $product->price }}</small>
+                <small><span>{{ $product->price * 140 }}円</span>+ 送料 ¥980</small>
             </h1>
+            <div class="sku">
+                <strong>SKU:</strong> {{ $product->sku }} <!-- SKUを表示 -->
+            </div>
             <div class="description">{!! $product->description !!}</div>
             <hr>
             <div class="row">
@@ -67,7 +70,7 @@
                                 placeholder="Quantity" value="{{ old('quantity') }}" />
                             <input type="hidden" name="product" value="{{ $product->id }}" />
                         </div>
-                        <button type="submit" class="btn btn-warning"><i class="fa fa-cart-plus"></i> Add to cart
+                        <button type="submit" class="btn btn-warning"><i class="fa fa-cart-plus"></i> カゴに追加
                         </button>
                     </form>
                 </div>
@@ -75,6 +78,39 @@
         </div>
     </div>
 </div>
+<!-- ログインしているユーザーのみ評価とコメントを入力できるフォームを表示 -->
+@auth
+    <div class="col-md-12">
+        <h4>あなたの評価とコメントを追加</h4>
+        <form id="review-form" action="{{ route('review.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            
+            <div class="form-group">
+                <label for="rating">評価</label>
+                <select name="rating" id="rating" class="form-control" required>
+                    <option value="">選択してください</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="comment">コメント</label>
+                <textarea name="comment" id="comment" class="form-control" rows="3" maxlength="100" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" disabled>登録</button>
+        </form>
+    </div>
+    @else
+    <div class="col-md-12">
+        <p>評価とコメントを追加するには、<a href="{{ route('login') }}">ログイン</a>してください。</p>
+    </div>
+@endauth
 @section('js')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -86,5 +122,25 @@
                 inlinePane: false
             });
         });
+        <script>
+        $(document).ready(function() {
+            // フォームの入力を検証して送信ボタンを活性化する
+            function validateForm() {
+                const rating = $('#rating').val().trim();
+                const comment = $('#comment').val().trim();
+                $('#review-form button[type="submit"]').prop('disabled', rating === '' || comment === '' || comment.length > 100);
+            }
+
+            $('#rating, #comment').on('change keyup', validateForm);
+
+            // フォームの送信処理
+            $('#review-form').submit(function(e) {
+                e.preventDefault();
+                // ここにAJAX送信の処理を追加
+                // 成功した場合の処理もここに追加
+            });
+        });
+        </script>
     </script>
+    
 @endsection
